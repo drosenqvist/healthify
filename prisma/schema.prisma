@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Meal {
+  id       String @id @default(cuid())
+  title    String
+  calories Int
+  day      Day[]
+}
+
+model Ingredient {
+  id       String @id @default(cuid())
+  title    String
+  calories Int
+  weight   Int
+  day      Day[]
+}
+
+model Day {
+  id   String   @id @default(cuid())
+  date DateTime @default(now()) @db.Date
+
+  Meal         Meal?       @relation(fields: [mealId], references: [id])
+  mealId       String?
+  Ingredient   Ingredient? @relation(fields: [ingredientId], references: [id])
+  ingredientId String?
+}
